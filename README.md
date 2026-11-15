@@ -35,6 +35,8 @@ npm run worker   # API on http://127.0.0.1:8787 (builds the static export first)
 
 The form posts to the Worker on 8787 in development and to `/api/reservations` on the deployed site.
 
+The lockfile has to be produced by npm 10.9.2, which is what Cloudflare’s build image runs. A newer npm omits optional packages that `npm ci` then reports as out of sync. `package.json` pins that version; use `npx npm@10.9.2 install` when dependencies change.
+
 To deploy, set the secrets once and publish:
 
 ```bash
