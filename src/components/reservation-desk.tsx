@@ -22,15 +22,19 @@ import {
   toISODate,
 } from "@/lib/restaurant"
 import {
-  createReservationId,
   eraseReservations,
   getServerReservationStore,
   isPastSeating,
+  isReservation,
   readReservationStore,
   replaceReservations,
   subscribeReservations,
   type Reservation,
 } from "@/lib/reservations"
+import {
+  seatingHasPassed,
+  validateReservationInput,
+} from "@/lib/reservation-request"
 import { cn } from "cn"
 
 type FieldName = "name" | "phone" | "date" | "time" | "partySize" | "note"
@@ -56,65 +60,15 @@ const emptyForm: FormState = {
 const fieldClass =
   "h-11 w-full rounded-lg border border-input bg-card px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm"
 
-function seatingHasPassed(date: Date, time: string, now = new Date()) {
-  const [hour, minute] = time.split(":").map(Number)
-  const slot = new Date(date)
-  slot.setHours(hour, minute, 0, 0)
-  return slot.getTime() < now.getTime()
-}
+// In development `next dev` serves the pages while `wrangler dev` answers the
+// API on 8787. Deployed, the Worker serves both on one origin.
+const RESERVATION_ENDPOINT =
+  process.env.NODE_ENV === "development"
+    ? "http://127.0.0.1:8787/api/reservations"
+    : "/api/reservations"
 
-function validate(form: FormState, now = new Date()) {
-  const errors: Partial<Record<FieldName, string>> = {}
-  const name = form.name.trim()
-  if (name.length < 2) {
-    errors.name = "Add the name the table should be held under."
-  } else if (name.length > 80) {
-    errors.name = "Use a shorter name, under 80 characters."
-  }
-
-  const digits = form.phone.replace(/\D/g, "")
-  if (digits.length < 8 || digits.length > 15) {
-    errors.phone = "Add a phone number the house can call, with at least 8 digits."
-  }
-
-  const date = parseISODate(form.date)
-  const today = parseISODate(toISODate(now))
-  if (!date || !today) {
-    errors.date = "Choose the day you want to sit."
-  } else if (date < today) {
-    errors.date = "That day has already passed."
-  } else if (isMonday(date)) {
-    errors.date = "The house is closed on Mondays. Choose Tuesday through Sunday."
-  } else {
-    const latest = new Date(today)
-    latest.setDate(latest.getDate() + restaurant.bookingWindowDays)
-    if (date > latest) {
-      errors.date = `Tables open ${restaurant.bookingWindowDays} days ahead. Pick an earlier day.`
-    }
-  }
-
-  if (!errors.date && date) {
-    const allowed = seatingsFor(date).some((seating) => seating.value === form.time)
-    if (!form.time || !allowed) {
-      errors.time = "Choose a seating that is open that day."
-    } else if (seatingHasPassed(date, form.time, now)) {
-      errors.time = "That seating has already started. Choose a later time."
-    }
-  } else if (!form.time) {
-    errors.time = "Choose a seating."
-  }
-
-  const party = Number(form.partySize)
-  if (!Number.isInteger(party) || party < 1 || party > restaurant.maxParty) {
-    errors.partySize = `Parties of 1 to ${restaurant.maxParty} can book here. For more seats, call the house.`
-  }
-
-  if (form.note.trim().length > 240) {
-    errors.note = "Keep the note under 240 characters."
-  }
-
-  return errors
-}
+const SEND_FAILURE_MESSAGE =
+  "The request could not reach the house. Try again in a moment, or call."
 
 export function ReservationDesk() {
   const baseId = useId()
@@ -123,6 +77,7 @@ export function ReservationDesk() {
   const [pending, setPending] = useState(false)
   const [confirmed, setConfirmed] = useState<Reservation | null>(null)
   const [storageError, setStorageError] = useState<string | null>(null)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const store = useSyncExternalStore(
     subscribeReservations,
     readReservationStore,
@@ -151,43 +106,83 @@ export function ReservationDesk() {
     setStorageError(null)
   }
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  function focusField(name: string) {
+    document.getElementById(`${baseId}-${name}`)?.focus()
+  }
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    const nextErrors = validate(form)
+    const nextErrors = validateReservationInput(form)
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) {
-      const first = Object.keys(nextErrors)[0]
-      document.getElementById(`${baseId}-${first}`)?.focus()
+      focusField(Object.keys(nextErrors)[0])
       return
     }
 
     setPending(true)
-    window.setTimeout(() => {
-      try {
-        const currentStore = readReservationStore()
-        const existing =
-          currentStore.status === "ready" ? currentStore.reservations : []
-        const reservation: Reservation = {
-          id: createReservationId(existing),
+    setSubmitError(null)
+    try {
+      const response = await fetch(RESERVATION_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           name: form.name.trim(),
           phone: form.phone.trim(),
           date: form.date,
           time: form.time,
           partySize: Number(form.partySize),
           note: form.note.trim(),
-          createdAt: new Date().toISOString(),
-        }
-        persist([reservation, ...existing])
+        }),
+      })
+      const payload: unknown = await response.json().catch(() => null)
+      const record =
+        payload && typeof payload === "object"
+          ? (payload as Record<string, unknown>)
+          : null
+
+      if (response.ok && record && isReservation(record.reservation)) {
+        const reservation = record.reservation
         setConfirmed(reservation)
         setForm(emptyForm)
-      } catch {
-        setStorageError(
-          "This browser blocked saving the reservation. You can try again, or call the house."
-        )
-      } finally {
-        setPending(false)
+        try {
+          const currentStore = readReservationStore()
+          const existing =
+            currentStore.status === "ready" ? currentStore.reservations : []
+          persist([reservation, ...existing])
+        } catch {
+          // The house already has the email; only the local copy failed.
+          setStorageError(
+            "The request reached the house, but this browser blocked keeping a copy. Note the reference above."
+          )
+        }
+        return
       }
-    }, 400)
+
+      if (
+        response.status === 400 &&
+        record &&
+        typeof record.errors === "object" &&
+        record.errors
+      ) {
+        const serverErrors = record.errors as Partial<
+          Record<FieldName, string>
+        >
+        setErrors(serverErrors)
+        const first = Object.keys(serverErrors)[0]
+        if (first) focusField(first)
+        return
+      }
+
+      setSubmitError(
+        record && typeof record.message === "string"
+          ? record.message
+          : SEND_FAILURE_MESSAGE
+      )
+    } catch {
+      setSubmitError(SEND_FAILURE_MESSAGE)
+    } finally {
+      setPending(false)
+    }
   }
 
   function removeReservation(id: string) {
@@ -226,9 +221,9 @@ export function ReservationDesk() {
                 The table is held under {confirmed.name}
               </CardTitle>
               <CardDescription>
-                Reference {confirmed.id}. The house confirms by phone at{" "}
-                {confirmed.phone}. Please arrive within {restaurant.holdMinutes}{" "}
-                minutes of the seating.
+                Reference {confirmed.id}. The request has been emailed to the
+                house, which confirms by phone at {confirmed.phone}. Please
+                arrive within {restaurant.holdMinutes} minutes of the seating.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -445,8 +440,17 @@ export function ReservationDesk() {
               />
             </Field>
 
+            {submitError ? (
+              <p
+                role="alert"
+                className="rounded-xl border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm"
+              >
+                {submitError}
+              </p>
+            ) : null}
+
             <Button type="submit" className="h-11 px-5" disabled={pending}>
-              {pending ? "Holding the table…" : "Request this table"}
+              {pending ? "Sending to the house…" : "Request this table"}
             </Button>
           </form>
         )}
@@ -457,8 +461,9 @@ export function ReservationDesk() {
           Reservations on this device
         </h2>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
-          Nothing is sent to a booking desk. The list below is what this browser
-          has kept.
+          Each request is emailed to the house. The list below is only the copy
+          this browser has kept — removing a line here does not cancel the
+          table. To cancel, call the house.
         </p>
 
         {storageError || store.status === "error" ? (

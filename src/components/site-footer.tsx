@@ -42,7 +42,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-white/10">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-4 text-xs text-paper/60 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p>Reservations made here stay in this browser and are confirmed by phone.</p>
+          <p>Reservations made here are emailed to the house and confirmed by phone.</p>
           <Link href="/reserve" className="text-brass hover:underline">
             Request a table
           </Link>

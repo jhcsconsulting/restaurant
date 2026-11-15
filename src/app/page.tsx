@@ -193,8 +193,8 @@ export default function HomePage() {
             Tell us when you are coming
           </h2>
           <p className="mt-4 max-w-lg text-sm leading-7 text-paper/75">
-            Tuesday through Sunday, parties of one to eight. The request stays
-            on this device, and the house confirms by phone. Mondays the gate
+            Tuesday through Sunday, parties of one to eight. The request is
+            emailed to the house, and we confirm by phone. Mondays the gate
             stays shut.
           </p>
           <Link

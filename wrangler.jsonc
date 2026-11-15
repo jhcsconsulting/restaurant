@@ -2,9 +2,13 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "restaurant",
   "compatibility_date": "2026-10-24",
+  // POST /api/reservations emails the restaurant via Resend; everything else
+  // falls through to the static assets below.
+  "main": "worker/index.ts",
   // Static site: serve the Next.js static export from `out/` (run `npm run build` first).
   "assets": {
     "directory": "./out",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    "binding": "ASSETS"
   }
 }

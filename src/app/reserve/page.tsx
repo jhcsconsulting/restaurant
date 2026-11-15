@@ -28,8 +28,8 @@ export default function ReservePage() {
           >
             {restaurant.phone}
           </a>
-          . A request made here is saved in this browser, and the house confirms
-          it by phone.
+          . A request made here is emailed to the house, and we confirm it by
+          phone.
         </p>
       </div>
       <div className="mt-12">

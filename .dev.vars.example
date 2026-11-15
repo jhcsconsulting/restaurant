@@ -1,0 +1,12 @@
+# Copy to .dev.vars for `wrangler dev`. Set the same three values as secrets
+# on the deployed Worker with `npx wrangler secret put <NAME>`.
+
+# API key from https://resend.com/api-keys
+RESEND_API_KEY=
+
+# A sender on a domain verified in Resend. For a first test,
+# onboarding@resend.dev works but only delivers to the Resend account address.
+RESEND_FROM_EMAIL=
+
+# The inbox the restaurant reads; reservation requests are sent here.
+RESTAURANT_NOTIFY_EMAIL=

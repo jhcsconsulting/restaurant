@@ -13,7 +13,7 @@ export type Reservation = {
 
 const STORAGE_KEY = "shikumen-reservations"
 
-function isReservation(value: unknown): value is Reservation {
+export function isReservation(value: unknown): value is Reservation {
   if (!value || typeof value !== "object") return false
   const record = value as Record<string, unknown>
   return (
@@ -124,15 +124,6 @@ export function replaceReservations(reservations: Reservation[]) {
 export function eraseReservations() {
   clearReservations()
   emit({ status: "ready", reservations: [] }, null)
-}
-
-export function createReservationId(existing: Reservation[]) {
-  const taken = new Set(existing.map((reservation) => reservation.id))
-  for (let attempt = 0; attempt < 20; attempt += 1) {
-    const id = `SK-${Math.floor(1000 + Math.random() * 9000)}`
-    if (!taken.has(id)) return id
-  }
-  return `SK-${Date.now().toString().slice(-6)}`
 }
 
 export function sortReservations(reservations: Reservation[]) {
