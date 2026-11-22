@@ -97,7 +97,7 @@ export default function MenuPage() {
         </h2>
         <p className="mt-3 max-w-lg text-sm leading-7 text-paper/75">
           The dining room seats a few dozen. If you already know you want the
-          pork and the dumplings, hold a table before you come down the lane.
+          pork and the dumplings, hold a table before you come in.
         </p>
         <Link
           href="/reserve"

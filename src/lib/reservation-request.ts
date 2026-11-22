@@ -1,10 +1,4 @@
-import {
-  isMonday,
-  parseISODate,
-  restaurant,
-  seatingsFor,
-  toISODate,
-} from "@/lib/restaurant"
+import { parseISODate, restaurant, toISODate } from "@/lib/restaurant"
 
 // The fields a guest submits when requesting a table. The reference id and
 // createdAt are assigned by the Worker, not the browser.
@@ -95,9 +89,6 @@ export function validateReservationInput(
     errors.date = "Choose the day you want to sit."
   } else if (date < today) {
     errors.date = "That day has already passed."
-  } else if (isMonday(date)) {
-    errors.date =
-      "The house is closed on Mondays. Choose Tuesday through Sunday."
   } else {
     const latest = new Date(today)
     latest.setDate(latest.getDate() + restaurant.bookingWindowDays)
@@ -106,22 +97,20 @@ export function validateReservationInput(
     }
   }
 
-  if (!errors.date && date) {
-    const allowed = seatingsFor(date).some(
-      (seating) => seating.value === input.time
-    )
-    if (!input.time || !allowed) {
-      errors.time = "Choose a seating that is open that day."
-    } else if (seatingHasPassed(date, input.time, now)) {
-      errors.time = "That seating has already started. Choose a later time."
-    }
-  } else if (!input.time) {
-    errors.time = "Choose a seating."
+  const timePattern = /^([01]\d|2[0-3]):[0-5]\d$/
+  if (!timePattern.test(input.time)) {
+    errors.time = "Choose the time you want to sit."
+  } else if (!errors.date && date && seatingHasPassed(date, input.time, now)) {
+    errors.time = "That time has already passed. Choose a later time."
   }
 
   const party = Number(input.partySize)
-  if (!Number.isInteger(party) || party < 1 || party > restaurant.maxParty) {
-    errors.partySize = `Parties of 1 to ${restaurant.maxParty} can book here. For more seats, call the house.`
+  if (
+    !Number.isInteger(party) ||
+    party < restaurant.minParty ||
+    party > restaurant.maxParty
+  ) {
+    errors.partySize = `Parties of ${restaurant.minParty} to ${restaurant.maxParty} can book here.`
   }
 
   if (input.note.trim().length > 240) {

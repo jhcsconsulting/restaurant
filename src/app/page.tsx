@@ -21,15 +21,14 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-t from-lacquer via-lacquer/55 to-lacquer/15" />
         <div className="relative mx-auto flex min-h-[78vh] w-full max-w-6xl flex-col justify-end px-4 py-14 sm:px-6 sm:py-20">
           <p className="text-xs tracking-[0.22em] text-brass uppercase">
-            Huangpu · Lane 48
+            Richmond Hill · Ontario
           </p>
           <h1 className="mt-4 max-w-3xl font-heading text-5xl leading-[0.95] tracking-tight text-paper sm:text-7xl">
             Shanghai Shikumen Fine Cuisine
           </h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-paper/85 sm:text-lg">
             Soup dumplings with a real broth, pork belly that has been braising
-            since morning, and a table in a lane house that still has its stone
-            gate.
+            since morning, and a table in Richmond Hill whenever you want to sit.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
@@ -61,9 +60,9 @@ export default function HomePage() {
               Address
             </dt>
             <dd className="mt-2 text-lg leading-7">
-              {restaurant.lane}
+              {restaurant.city}
               <br />
-              {restaurant.district}
+              {restaurant.region}
             </dd>
           </div>
           <div>
@@ -84,14 +83,15 @@ export default function HomePage() {
               The kitchen
             </dt>
             <dd className="mt-2 text-sm leading-7 text-muted-foreground">
-              Benbang cooking: soy, sugar, Shaoxing, and time. Call{" "}
+              Benbang cooking: soy, sugar, Shaoxing, and time. For a private
+              room, call{" "}
               <a
                 href={restaurant.phoneHref}
                 className="text-foreground underline-offset-4 hover:underline"
               >
                 {restaurant.phone}
-              </a>{" "}
-              for parties larger than eight.
+              </a>
+              .
             </dd>
           </div>
         </dl>
@@ -163,13 +163,12 @@ export default function HomePage() {
               The house
             </p>
             <h2 className="mt-2 font-heading text-4xl tracking-tight sm:text-5xl">
-              The lane comes first
+              The cooking comes first
             </h2>
             <p className="mt-5 text-base leading-7 text-muted-foreground">
-              Shikumen means stone gate. The frame on Lane 48 is still the
-              original, and the ground floor is the dining room. Upstairs, the
-              pork belly braises with the windows cracked so the lane smells
-              like soy by late afternoon.
+              Shikumen means stone gate. The dining room is in Richmond Hill,
+              and the cooking follows that tradition: pork belly braises through
+              the day so the kitchen smells like soy by late afternoon.
             </p>
             <Link
               href="/story"
@@ -193,9 +192,8 @@ export default function HomePage() {
             Tell us when you are coming
           </h2>
           <p className="mt-4 max-w-lg text-sm leading-7 text-paper/75">
-            Tuesday through Sunday, parties of one to eight. The request is
-            emailed to the house, and we confirm by phone. Mondays the gate
-            stays shut.
+            Open every day, any time, for parties of four to twenty. The
+            request is emailed to the house, and we confirm by phone.
           </p>
           <Link
             href="/reserve"

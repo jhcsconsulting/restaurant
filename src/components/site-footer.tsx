@@ -10,16 +10,16 @@ export function SiteFooter() {
             {restaurant.name}
           </p>
           <p className="mt-3 text-sm leading-6 text-paper/75">
-            A dining room in a lane house. Benbang cooking, seated the way the
-            house has always eaten: unhurried, and with the gate in sight.
+            Shanghainese cooking in Richmond Hill, Ontario. Benbang food,
+            seated the way the house has always eaten: unhurried.
           </p>
         </div>
         <div>
           <p className="text-xs tracking-[0.18em] text-brass uppercase">Visit</p>
           <p className="mt-3 text-sm leading-6">
-            {restaurant.lane}
+            {restaurant.city}
             <br />
-            {restaurant.district}
+            {restaurant.region}
           </p>
           <a
             href={restaurant.phoneHref}

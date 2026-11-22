@@ -1,27 +1,20 @@
 export const restaurant = {
   name: "Shanghai Shikumen Fine Cuisine",
   shortName: "Shikumen",
-  lane: "Lane 48, Sinan Road",
-  district: "Huangpu, Shanghai",
-  phone: "+86 21 5388 1948",
-  phoneHref: "tel:+862153881948",
+  city: "Richmond Hill",
+  region: "Ontario, Canada",
+  phone: "+1 647 975 6886",
+  phoneHref: "tel:+16479756886",
   holdMinutes: 15,
-  maxParty: 8,
+  minParty: 4,
+  maxParty: 20,
   bookingWindowDays: 90,
 }
 
 export const hours = [
   {
-    label: "Tuesday – Friday",
-    detail: "Lunch 11:30–14:30 · Dinner 17:30–21:00",
-  },
-  {
-    label: "Saturday – Sunday",
-    detail: "Lunch 11:00–14:30 · Dinner 17:00–21:30",
-  },
-  {
-    label: "Monday",
-    detail: "The gate is shut",
+    label: "Every day",
+    detail: "Open any time",
   },
 ] as const
 
@@ -150,49 +143,6 @@ export const courses: MenuCourse[] = [
   "Noodles",
 ]
 
-export type Seating = {
-  value: string
-  service: "Lunch" | "Dinner"
-}
-
-const weekdaySeatings: Seating[] = [
-  { value: "11:30", service: "Lunch" },
-  { value: "12:00", service: "Lunch" },
-  { value: "12:30", service: "Lunch" },
-  { value: "13:00", service: "Lunch" },
-  { value: "13:30", service: "Lunch" },
-  { value: "14:00", service: "Lunch" },
-  { value: "17:30", service: "Dinner" },
-  { value: "18:00", service: "Dinner" },
-  { value: "18:30", service: "Dinner" },
-  { value: "19:00", service: "Dinner" },
-  { value: "19:30", service: "Dinner" },
-  { value: "20:00", service: "Dinner" },
-  { value: "20:30", service: "Dinner" },
-  { value: "21:00", service: "Dinner" },
-]
-
-const weekendSeatings: Seating[] = [
-  { value: "11:00", service: "Lunch" },
-  { value: "11:30", service: "Lunch" },
-  { value: "12:00", service: "Lunch" },
-  { value: "12:30", service: "Lunch" },
-  { value: "13:00", service: "Lunch" },
-  { value: "13:30", service: "Lunch" },
-  { value: "14:00", service: "Lunch" },
-  { value: "14:30", service: "Lunch" },
-  { value: "17:00", service: "Dinner" },
-  { value: "17:30", service: "Dinner" },
-  { value: "18:00", service: "Dinner" },
-  { value: "18:30", service: "Dinner" },
-  { value: "19:00", service: "Dinner" },
-  { value: "19:30", service: "Dinner" },
-  { value: "20:00", service: "Dinner" },
-  { value: "20:30", service: "Dinner" },
-  { value: "21:00", service: "Dinner" },
-  { value: "21:30", service: "Dinner" },
-]
-
 export function toISODate(date: Date) {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, "0")
@@ -215,19 +165,6 @@ export function parseISODate(value: string) {
     return null
   }
   return date
-}
-
-export function isMonday(date: Date) {
-  return date.getDay() === 1
-}
-
-export function isWeekend(date: Date) {
-  const day = date.getDay()
-  return day === 0 || day === 6
-}
-
-export function seatingsFor(date: Date) {
-  return isWeekend(date) ? weekendSeatings : weekdaySeatings
 }
 
 export function formatLongDate(value: string) {

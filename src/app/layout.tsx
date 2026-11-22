@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: `%s · ${restaurant.shortName}`,
   },
   description:
-    "Shanghainese cooking in a shikumen lane house on Sinan Road. Read the story, see the food, and reserve a table.",
+    "Shanghainese cooking in Richmond Hill, Ontario. Read the story, see the food, and reserve a table.",
 }
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

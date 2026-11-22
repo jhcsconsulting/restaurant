@@ -57,7 +57,7 @@ function reservationEmail(reservation: ReservationRequest & { id: string }) {
     `Name: ${reservation.name}`,
     `Phone: ${reservation.phone}`,
     `Day: ${day}`,
-    `Seating: ${reservation.time}`,
+    `Time: ${reservation.time}`,
     `Party: ${party}`,
     `Reference: ${reservation.id}`,
   ]

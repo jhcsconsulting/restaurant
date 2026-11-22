@@ -1,6 +1,6 @@
 "use client"
 
-import { useId, useMemo, useState, useSyncExternalStore, type FormEvent, type ReactNode } from "react"
+import { useId, useState, useSyncExternalStore, type FormEvent, type ReactNode } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -15,10 +15,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
   formatLongDate,
-  isMonday,
   parseISODate,
   restaurant,
-  seatingsFor,
   toISODate,
 } from "@/lib/restaurant"
 import {
@@ -85,11 +83,6 @@ export function ReservationDesk() {
   )
 
   const selectedDate = parseISODate(form.date)
-  const seatings = useMemo(() => {
-    const date = parseISODate(form.date)
-    if (!date || isMonday(date)) return []
-    return seatingsFor(date)
-  }, [form.date])
 
   const today = toISODate(new Date())
   const latestDate = new Date()
@@ -205,9 +198,6 @@ export function ReservationDesk() {
     }
   }
 
-  const lunch = seatings.filter((seating) => seating.service === "Lunch")
-  const dinner = seatings.filter((seating) => seating.service === "Dinner")
-
   return (
     <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
       <div>
@@ -222,8 +212,8 @@ export function ReservationDesk() {
               </CardTitle>
               <CardDescription>
                 Reference {confirmed.id}. The request has been emailed to the
-                house, which confirms by phone at {confirmed.phone}. Please
-                arrive within {restaurant.holdMinutes} minutes of the seating.
+                house, which confirms by phone at {confirmed.phone}.                 Please
+                arrive within {restaurant.holdMinutes} minutes of the time.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -233,7 +223,7 @@ export function ReservationDesk() {
                   <dd className="mt-1 font-medium">{formatLongDate(confirmed.date)}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted-foreground">Seating</dt>
+                  <dt className="text-muted-foreground">Time</dt>
                   <dd className="mt-1 font-medium">{confirmed.time}</dd>
                 </div>
                 <div>
@@ -292,7 +282,7 @@ export function ReservationDesk() {
                   type="tel"
                   autoComplete="tel"
                   inputMode="tel"
-                  placeholder="+86 …"
+                  placeholder="+1 …"
                   value={form.phone}
                   aria-invalid={Boolean(errors.phone)}
                   aria-describedby={
@@ -319,14 +309,17 @@ export function ReservationDesk() {
                   onChange={(event) => update("partySize", event.target.value)}
                 >
                   <option value="">Select</option>
-                  {Array.from({ length: restaurant.maxParty }, (_, index) => {
-                    const size = index + 1
-                    return (
-                      <option key={size} value={size}>
-                        {size} {size === 1 ? "guest" : "guests"}
-                      </option>
-                    )
-                  })}
+                  {Array.from(
+                    { length: restaurant.maxParty - restaurant.minParty + 1 },
+                    (_, index) => {
+                      const size = restaurant.minParty + index
+                      return (
+                        <option key={size} value={size}>
+                          {size} guests
+                        </option>
+                      )
+                    }
+                  )}
                 </select>
               </Field>
             </div>
@@ -348,11 +341,8 @@ export function ReservationDesk() {
                     setForm((current) => {
                       const date = parseISODate(value)
                       const stillOpen =
-                        date &&
-                        !isMonday(date) &&
-                        seatingsFor(date).some(
-                          (seating) => seating.value === current.time
-                        ) &&
+                        date !== null &&
+                        /^([01]\d|2[0-3]):[0-5]\d$/.test(current.time) &&
                         !seatingHasPassed(date, current.time)
                       return {
                         ...current,
@@ -368,55 +358,20 @@ export function ReservationDesk() {
                   }}
                 />
               </Field>
-              <Field id={`${baseId}-time`} label="Seating" error={errors.time}>
-                <select
+              <Field id={`${baseId}-time`} label="Time" error={errors.time}>
+                <Input
                   id={`${baseId}-time`}
                   name="time"
+                  type="time"
                   value={form.time}
-                  disabled={!selectedDate || isMonday(selectedDate)}
+                  disabled={!selectedDate}
                   aria-invalid={Boolean(errors.time)}
-                  aria-describedby={errors.time ? `${baseId}-time-error` : undefined}
-                  className={cn(fieldClass, "disabled:opacity-50")}
+                  aria-describedby={
+                    errors.time ? `${baseId}-time-error` : undefined
+                  }
+                  className="h-11 disabled:opacity-50"
                   onChange={(event) => update("time", event.target.value)}
-                >
-                  <option value="">
-                    {selectedDate ? "Select a time" : "Choose a date first"}
-                  </option>
-                  {lunch.length > 0 ? (
-                    <optgroup label="Lunch">
-                      {lunch.map((seating) => (
-                        <option
-                          key={seating.value}
-                          value={seating.value}
-                          disabled={
-                            selectedDate
-                              ? seatingHasPassed(selectedDate, seating.value)
-                              : false
-                          }
-                        >
-                          {seating.value}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ) : null}
-                  {dinner.length > 0 ? (
-                    <optgroup label="Dinner">
-                      {dinner.map((seating) => (
-                        <option
-                          key={seating.value}
-                          value={seating.value}
-                          disabled={
-                            selectedDate
-                              ? seatingHasPassed(selectedDate, seating.value)
-                              : false
-                          }
-                        >
-                          {seating.value}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ) : null}
-                </select>
+                />
               </Field>
             </div>
 
@@ -516,7 +471,7 @@ export function ReservationDesk() {
                       </p>
                       {past ? (
                         <p className="mt-1 text-xs tracking-wide text-cinnabar uppercase">
-                          Past seating
+                          Past time
                         </p>
                       ) : null}
                     </div>

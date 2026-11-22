@@ -8,7 +8,7 @@ import { cn } from "cn"
 export const metadata: Metadata = {
   title: "Story",
   description:
-    "How a shikumen lane house on Sinan Road became a dining room for Shanghainese cooking.",
+    "How Shanghainese cooking found a dining room in Richmond Hill, Ontario.",
 }
 
 export default function StoryPage() {
@@ -23,9 +23,9 @@ export default function StoryPage() {
             A stone gate, then a kitchen
           </h1>
           <p className="mt-6 text-lg leading-8 text-muted-foreground">
-            Shanghai Shikumen Fine Cuisine occupies the ground floor of a lane
-            house off Sinan Road. The cooking is benbang — the local register
-            of soy, sugar, vinegar, and wine — and the room is small on purpose.
+            Shanghai Shikumen Fine Cuisine cooks in Richmond Hill, Ontario. The
+            food is benbang — soy, sugar, vinegar, and wine — and the room is
+            there for a long meal.
           </p>
         </div>
         <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-muted">
@@ -54,9 +54,10 @@ export default function StoryPage() {
               behind both.
             </p>
             <p>
-              Lane 48 kept its frame. The carved lintel is worn smooth at the
-              height of a shoulder. Guests come in off the wet stone, past the
-              gate, and sit where the front room used to be. There is no lobby.
+              The name comes from that gate. The dining room is in Richmond
+              Hill, Ontario, and the cooking follows the same register: soy,
+              sugar, vinegar, and time. Guests sit down to a long meal. There
+              is no lobby.
             </p>
           </div>
         </div>
@@ -78,7 +79,7 @@ export default function StoryPage() {
           </h2>
           <div className="mt-5 space-y-5 text-base leading-8 text-muted-foreground">
             <p>
-              Benbang cai is the food of this city, not a tour of every region.
+              Benbang cai is the food of Shanghai, not a tour of every region.
               Red-braising does the heavy work. Pork belly goes into soy, rock
               sugar, and Shaoxing in the morning and is not touched for show.
               The smoked fish is fried, then sweetened until it shines. The
@@ -96,7 +97,7 @@ export default function StoryPage() {
       <section className="border-t border-border">
         <div className="mx-auto w-full max-w-3xl px-4 py-16 sm:px-6 sm:py-20">
           <h2 className="font-heading text-3xl tracking-tight md:text-4xl">
-            A day on Lane 48
+            A day in the kitchen
           </h2>
           <ol className="mt-8 space-y-8">
             <li>
@@ -105,7 +106,7 @@ export default function StoryPage() {
               </p>
               <p className="mt-2 leading-7 text-muted-foreground">
                 Stock for the dumplings, a fresh pot of scallion oil, and the
-                belly into the braise. The lane is still quiet enough to hear
+                belly into the braise. The kitchen is still quiet enough to hear
                 the steamer lids.
               </p>
             </li>
@@ -125,13 +126,13 @@ export default function StoryPage() {
               </p>
               <p className="mt-2 leading-7 text-muted-foreground">
                 The lanterns go on before the first seating. Tables turn once,
-                sometimes twice. At the end of service the gate is barred and
-                the upstairs windows go dark.
+                sometimes twice. At the end of service the room goes quiet and
+                the lights go down.
               </p>
             </li>
           </ol>
           <p className="mt-10 leading-7">
-            {restaurant.lane}, {restaurant.district}.{" "}
+            {restaurant.city}, {restaurant.region}.{" "}
             <a
               href={restaurant.phoneHref}
               className="text-cinnabar underline-offset-4 hover:underline"

@@ -6,7 +6,7 @@ import { restaurant } from "@/lib/restaurant"
 export const metadata: Metadata = {
   title: "Reserve a table",
   description:
-    "Request a table at Shanghai Shikumen Fine Cuisine. Parties of one to eight, Tuesday through Sunday.",
+    "Request a table at Shanghai Shikumen Fine Cuisine in Richmond Hill. Parties of four to twenty, any day, any time.",
 }
 
 export default function ReservePage() {
@@ -17,11 +17,11 @@ export default function ReservePage() {
           Reservations
         </p>
         <h1 className="mt-3 font-heading text-5xl tracking-tight sm:text-6xl">
-          A table on Lane 48
+          A table in Richmond Hill
         </h1>
         <p className="mt-5 text-lg leading-8 text-muted-foreground">
-          Parties of one to {restaurant.maxParty}. Monday the gate is shut. For
-          a private room or a larger table, call{" "}
+          Open every day, any time. Parties of {restaurant.minParty} to{" "}
+          {restaurant.maxParty}. For a private room, call{" "}
           <a
             href={restaurant.phoneHref}
             className="text-foreground underline-offset-4 hover:underline"

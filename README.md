@@ -1,6 +1,6 @@
 # Shanghai Shikumen Fine Cuisine
 
-A small website for a Shanghainese restaurant in a shikumen lane house: the story of the room, a short menu with photographs, and a table request you can complete in the browser.
+A small website for a Shanghainese restaurant in Richmond Hill, Ontario: the story of the room, a short menu with photographs, and a table request you can complete in the browser.
 
 A table request is emailed to the restaurant by a Cloudflare Worker (`worker/index.ts`, `POST /api/reservations`) through [Resend](https://resend.com). The browser also keeps a copy in `localStorage` so the guest can read the reference back when the house calls; removing that copy does not cancel the table.
 
