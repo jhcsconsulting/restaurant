@@ -9,6 +9,7 @@ export const restaurant = {
   holdMinutes: 15,
   minParty: 4,
   maxParty: 20,
+  pricePerPersonCad: 120,
   bookingWindowDays: 90,
 }
 
@@ -177,8 +178,4 @@ export function formatLongDate(value: string) {
     month: "long",
     year: "numeric",
   }).format(date)
-}
-
-export function formatPrice(price: number) {
-  return `¥${price}`
 }

@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
-import { dishes, formatPrice, hours, restaurant } from "@/lib/restaurant"
+import { dishes, hours, restaurant } from "@/lib/restaurant"
 import { cn } from "cn"
 
 const signatures = dishes.filter((dish) => dish.signature).slice(0, 3)
@@ -42,7 +42,7 @@ export default function HomePage() {
               Reserve a table
             </Link>
             <Link
-              href="/menu"
+              href="/food"
               className={cn(
                 buttonVariants({ variant: "outline", size: "lg" }),
                 "h-11 border-paper/30 bg-transparent px-5 text-sm text-paper hover:bg-paper/10 hover:text-paper"
@@ -111,10 +111,10 @@ export default function HomePage() {
             </h2>
           </div>
           <Link
-            href="/menu"
+            href="/food"
             className="text-sm text-cinnabar underline-offset-4 hover:underline"
           >
-            The full menu
+            See the food
           </Link>
         </div>
         <ul className="mt-10 grid gap-8 md:grid-cols-3">
@@ -130,14 +130,9 @@ export default function HomePage() {
                     className="object-cover transition duration-500 group-hover:scale-[1.03]"
                   />
                 </div>
-                <div className="mt-4 flex items-baseline justify-between gap-3">
-                  <h3 className="font-heading text-2xl tracking-tight">
-                    {dish.english}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {formatPrice(dish.price)}
-                  </p>
-                </div>
+                <h3 className="mt-4 font-heading text-2xl tracking-tight">
+                  {dish.english}
+                </h3>
                 <p lang="zh" className="text-sm text-cinnabar">
                   {dish.chinese}
                 </p>

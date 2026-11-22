@@ -50,5 +50,6 @@ npm run deploy
 
 - **Home** — the dining room, a few signature dishes, and a way to the reservation form
 - **Story** — what a shikumen gate is, and the dining room in an art gallery
-- **Menu** — cold dishes, dumplings, braises, noodles
+- **See the food** — photographs of soy sauce noodles, crab with rice cakes, and other dishes
+- **Menu** — the head chef shows the day’s menu before you arrive; 120 CAD per person, with exceptions for children
 - **Reserve** — name, phone, date, seating, party size, and an optional note, with validation, an email to the house, and a confirmation
