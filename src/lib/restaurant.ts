@@ -1,6 +1,7 @@
 export const restaurant = {
   name: "Shanghai Shikumen Fine Cuisine",
   shortName: "Shikumen",
+  place: "An art gallery",
   city: "Richmond Hill",
   region: "Ontario, Canada",
   phone: "+1 647 975 6886",

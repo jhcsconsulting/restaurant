@@ -49,6 +49,6 @@ npm run deploy
 ## Pages
 
 - **Home** — the dining room, a few signature dishes, and a way to the reservation form
-- **Story** — what a shikumen gate is, and how the kitchen cooks
+- **Story** — what a shikumen gate is, and the dining room in an art gallery
 - **Menu** — cold dishes, dumplings, braises, noodles
 - **Reserve** — name, phone, date, seating, party size, and an optional note, with validation, an email to the house, and a confirmation

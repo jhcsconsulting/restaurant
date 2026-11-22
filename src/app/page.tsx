@@ -28,7 +28,8 @@ export default function HomePage() {
           </h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-paper/85 sm:text-lg">
             Soup dumplings with a real broth, pork belly that has been braising
-            since morning, and a table in Richmond Hill whenever you want to sit.
+            since morning, and a table in an art gallery in Richmond Hill
+            whenever you want to sit.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
@@ -60,6 +61,8 @@ export default function HomePage() {
               Address
             </dt>
             <dd className="mt-2 text-lg leading-7">
+              {restaurant.place}
+              <br />
               {restaurant.city}
               <br />
               {restaurant.region}
@@ -166,9 +169,10 @@ export default function HomePage() {
               The cooking comes first
             </h2>
             <p className="mt-5 text-base leading-7 text-muted-foreground">
-              Shikumen means stone gate. The dining room is in Richmond Hill,
-              and the cooking follows that tradition: pork belly braises through
-              the day so the kitchen smells like soy by late afternoon.
+              Shikumen means stone gate. The dining room is inside an art
+              gallery in Richmond Hill, and the cooking follows that tradition:
+              pork belly braises through the day so the kitchen smells like soy
+              by late afternoon.
             </p>
             <Link
               href="/story"

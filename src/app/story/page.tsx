@@ -8,7 +8,7 @@ import { cn } from "cn"
 export const metadata: Metadata = {
   title: "Story",
   description:
-    "How Shanghainese cooking found a dining room in Richmond Hill, Ontario.",
+    "How Shanghainese cooking found a dining room in an art gallery in Richmond Hill, Ontario.",
 }
 
 export default function StoryPage() {
@@ -23,9 +23,9 @@ export default function StoryPage() {
             A stone gate, then a kitchen
           </h1>
           <p className="mt-6 text-lg leading-8 text-muted-foreground">
-            Shanghai Shikumen Fine Cuisine cooks in Richmond Hill, Ontario. The
-            food is benbang — soy, sugar, vinegar, and wine — and the room is
-            there for a long meal.
+            Shanghai Shikumen Fine Cuisine cooks inside an art gallery in
+            Richmond Hill, Ontario. The food is benbang — soy, sugar, vinegar,
+            and wine — and the room is there for a long meal.
           </p>
         </div>
         <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-muted">
@@ -54,41 +54,10 @@ export default function StoryPage() {
               behind both.
             </p>
             <p>
-              The name comes from that gate. The dining room is in Richmond
-              Hill, Ontario, and the cooking follows the same register: soy,
-              sugar, vinegar, and time. Guests sit down to a long meal. There
-              is no lobby.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 md:grid-cols-2 md:py-20">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-muted md:order-2">
-          <Image
-            src="/photos/hero-dining.jpg"
-            alt="Paper lanterns over dark wood tables set with celadon bowls in the dining room"
-            fill
-            sizes="(min-width: 768px) 45vw, 100vw"
-            className="object-cover"
-          />
-        </div>
-        <div>
-          <h2 className="font-heading text-3xl tracking-tight md:text-4xl">
-            How the kitchen cooks
-          </h2>
-          <div className="mt-5 space-y-5 text-base leading-8 text-muted-foreground">
-            <p>
-              Benbang cai is the food of Shanghai, not a tour of every region.
-              Red-braising does the heavy work. Pork belly goes into soy, rock
-              sugar, and Shaoxing in the morning and is not touched for show.
-              The smoked fish is fried, then sweetened until it shines. The
-              drunken chicken cools in wine until the jelly sets.
-            </p>
-            <p>
-              Dumplings are a separate discipline. The soup inside a xiaolongbao
-              is stock, reduced and jellied, then melted again by steam. If the
-              wrapper breaks in the steamer, it does not leave the kitchen.
+              The name comes from that gate. The dining room is inside an art
+              gallery in Richmond Hill, Ontario, and the cooking follows the
+              same register: soy, sugar, vinegar, and time. Guests sit down to
+              a long meal. There is no lobby.
             </p>
           </div>
         </div>
@@ -132,7 +101,7 @@ export default function StoryPage() {
             </li>
           </ol>
           <p className="mt-10 leading-7">
-            {restaurant.city}, {restaurant.region}.{" "}
+            {restaurant.place}, {restaurant.city}, {restaurant.region}.{" "}
             <a
               href={restaurant.phoneHref}
               className="text-cinnabar underline-offset-4 hover:underline"
